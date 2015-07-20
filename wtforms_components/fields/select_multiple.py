@@ -31,7 +31,7 @@ class SelectMultipleField(SelectField):
         if self.data:
             values = self.choice_values
             for value in self.data:
-                if value not in values:
+                if self.coerce(value) not in values:
                     raise ValueError(
                         self.gettext(
                             "'%(value)s' is not a valid"
