@@ -46,9 +46,9 @@ class SelectField(_SelectField):
         for value, label in self.concrete_choices:
             if isinstance(label, (list, tuple)):
                 for subvalue, sublabel in label:
-                    values.append(subvalue)
+                    values.append(self.coerce(subvalue))
             else:
-                values.append(value)
+                values.append(self.coerce(value))
         return values
 
     def pre_validate(self, form):
@@ -56,8 +56,7 @@ class SelectField(_SelectField):
         Don't forget to validate also values from embedded lists.
         """
         values = self.choice_values
-        if ((self.data is None and u'' in values)
-                or self.coerce(self.data) in values):
+        if (self.data is None and u'' in values) or self.data in values:
             return True
 
         raise ValidationError(self.gettext(u'Not a valid choice'))
